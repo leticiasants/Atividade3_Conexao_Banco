@@ -17,7 +17,8 @@ class View():
     def criarPedido(self):
         orderid = int(input('Id do pedido: '))
         customerid = input('Id do cliente: ')
-        employeeid = int(input('Id do fúncionário: '))
+        employeeLastName = input('Primeiro nome do fúncionário: ')
+        employeeFirstName = input('Sobrenome do fúncionário: ')
         orderdate = input('Data do pedido (YYYY-MM-DD): ')
         year, month, day = map(int, orderdate.split('-'))
         orderdate = datetime(year, month, day)
@@ -30,19 +31,20 @@ class View():
         year, month, day = map(int, shippeddate.split('-'))
         shippeddate = datetime(year, month, day)
         
-        freight = input('Frete: ')
-        shipname = input('Nome da transportadora: ')
-        shipaddress = input('Endereço para envio: ')
-        shipcity = input('Cidade para envio: ')
-        shipregion = input('Região para envio: ')
-        shippostalcode = input('Codigo postal para envio: ')
-        shipcountry = input('País para envio: ')
-        shipperid = input('Id do remetente: ')
+        addProduto = 1
+        products = []
+        while addProduto == 1:
+            productid = int(input('Id do produto: '))
+            quantity = int(input('Quantidade: '))
+            
+            products.append([productid, quantity])
+            
+            addProduto = int(input('Deseja inserir mais produtos? \nDigite 1 caso afirmativo e 0 para negativo\n'))
         
-        pedidoAtributos = [orderid, customerid, employeeid,
+        pedidoAtributos = [orderid, customerid, 
+                  employeeLastName, employeeFirstName,
                   orderdate, requireddate, shippeddate,
-                  freight, shipname, shipaddress, shipcity,
-                  shipregion, shippostalcode, shipcountry, shipperid]
+                  products]
         
         return pedidoAtributos
         
