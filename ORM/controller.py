@@ -1,5 +1,5 @@
 from view import View
-from dao import Auxiliar, OrderDao, OrderDetailsDao, FuncionarioDao, ClienteDao, RankingFuncionarioDao
+from dao import OrderDao, OrderDetailsDao, FuncionarioDao, ClienteDao, RankingFuncionarioDao
 from model import Category, Customer, Employee, Product, Shipper, Supplier, Order, OrderDetail
 
 class Controller:
