@@ -76,15 +76,18 @@ class OrderDetailsDao:
 
 
 class FuncionarioDao:
-    def __init__(self) -> None:
+    def __init__(self):
         self.auxiliar = Auxiliar()
 
     def obter(self, primeiro_nome=None, ultimo_nome=None):
+        primeiro_nome = 'Nancy'
+        ultimo_nome = 'Davolio'
         sql = 'select * from northwind.employees'
         parametros = None
         if primeiro_nome is not None and ultimo_nome is not None:
             sql += ' where firstname=%s and lastname=%s'
             parametros = (primeiro_nome,ultimo_nome)
+        print(parametros)
         res = self.auxiliar.executar_query(sql, parametros)
         return self.auxiliar.processar(res, Employee)
 

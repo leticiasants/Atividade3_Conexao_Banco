@@ -1,9 +1,12 @@
 from view import View
 from dao import Auxiliar, OrderDao, OrderDetailsDao, FuncionarioDao, ClienteDao
+from model import Category, Customer, Employee, Product, Shipper, Supplier, Order, OrderDetail
 
 class Controller:
     def __init__(self):
         self.view = View()
+        self.auxiliar = Auxiliar()
+        self.order = Order()
 
     def main(self):
         opcao = self.view.main()
@@ -24,9 +27,14 @@ class Controller:
         employeeFirstName = pedido[2]
         employeeLastName = pedido[3]
         
-        employeeid = FuncionarioDao.obter(employeeFirstName, employeeLastName)
-        pedido.append(employeeid)
+        employee = FuncionarioDao.obter(self, employeeFirstName, employeeLastName)
         
+        employee_id = employee.employeeid
+    
+        pedido.pop(2)
+        pedido.pop(2)
+        pedido.insert(2, employee_id)        
+            
         responsePedido = OrderDao.inserir(pedido)
         
         if responsePedido != None:
