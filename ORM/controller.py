@@ -1,12 +1,14 @@
 from view import View
-from dao import Auxiliar, OrderDao, OrderDetailsDao, FuncionarioDao, ClienteDao
+from dao import Auxiliar, OrderDao, OrderDetailsDao, FuncionarioDao, ClienteDao, RankingFuncionarioDao
 from model import Category, Customer, Employee, Product, Shipper, Supplier, Order, OrderDetail
 
 class Controller:
     def __init__(self):
         self.view = View()
-        self.auxiliar = Auxiliar()
-        self.order = Order()
+        self.orderDao = OrderDao()
+        self.orderDetailsDao = OrderDetailsDao()
+        self.funcionarioDao = FuncionarioDao()
+        self.rankingFuncionarioDao = RankingFuncionarioDao()
 
     def main(self):
         opcao = self.view.main()
@@ -22,67 +24,38 @@ class Controller:
             opcao = self.view.main()
             
     def criarPedido(self):
-        pedido = self.view.criarPedido()
-        print(pedido)
-        employeeFirstName = pedido[2]
-        employeeLastName = pedido[3]
+        pedido_atributos = self.view.criarPedido()
         
-        employee = FuncionarioDao.obter(self, employeeFirstName, employeeLastName)
-        print(employee)
-        employee_id = employee.employeeid
-    
-        pedido.pop(2)
-        pedido.pop(2)
-        pedido.insert(2, employee_id)
-        print(pedido)
-        pedido_Data = Order(
-        orderid=pedido[0],
-        customerid=pedido[1],
-        employeeid=pedido[2],
-        orderdate=pedido[3],
-        requireddate=pedido[4],
-        shippeddate=pedido[5],
-        freight=None,
-        shipname=None,
-        shipaddress=None,
-        shipcity=None,
-        shipregion=None,
-        shippostalcode=None,
-        shipcountry=None,
-        shipperid=None,
-        qtdprodutos=len(pedido[6]),
-        maisdesconto=None
-    )        
+        employeeFirstName = pedido_atributos[2]
+        employeeLastName = pedido_atributos[3]
         
-        responsePedido = OrderDao.inserir(self,pedido_Data)
+        try:        
+            employee = self.funcionarioDao.obter(employeeFirstName, employeeLastName)
+            pedido = Order(orderid=pedido_atributos[0], customerid=pedido_atributos[1], orderdate=pedido_atributos[4],requireddate=pedido_atributos[4],shippeddate=pedido_atributos[5],employeeid=employee.employeeid)
+            self.orderDao.inserir(pedido)
+            for prod in pedido_atributos[7]:
+                self.orderDetailsDao.inserir(OrderDetail(orderid=pedido_atributos[0],productid=prod[0],quantity=prod[1]))
         
-        if responsePedido is not None:
-            for detail in pedido[6]:
-                detalhes_pedido = OrderDetail(
-                    orderid=pedido[0],
-                    productid=detail[0],  
-                    unitprice= None,
-                    quantity=detail[1],
-                    discount=None
-                )
-                print(detalhes_pedido)
-                response = OrderDetailsDao().inserir(detalhes_pedido)
-                if response is None:
-                    self.view.responseCriarPedido(None)
-                    return
-
-        self.view.responseCriarPedido(responsePedido)
+            self.view.responseCriarPedido(1)
+        except Exception as e:
+            self.view.responseCriarPedido(None)
     
     def consultarPedido(self):
         pedidoCons = self.view.consultarPedido()
+        pedido = self.orderDao.obter(pedidoCons)
+        detalhes = self.orderDetailsDao.obter(pedidoCons)
+        vendedor = self.funcionarioDao.obterFuncionarioPorId(pedido.employeeid)
+        self.view.relatorioConsultaPedido(pedido, detalhes, vendedor)
+
         
-        relatorio = OrderDao.obter(pedidoCons)
-        self.view.relatorioConsultaPedido(relatorio)
     
     def rankingFunc(self):
-        renkingFunc = self.view.rankearFuncionarios()
+        datas = self.view.rankearFuncionarios()
+        dataIni = datas[0]
+        dataFin = datas[1]
+        ranking = RankingFuncionarioDao.obter(self, dataIni, dataFin)
         
-        self.view.relatorioRankingFuncionarios()
+        self.view.relatorioRankingFuncionarios(ranking)
     
 if __name__ == "__main__":
     controller = Controller()

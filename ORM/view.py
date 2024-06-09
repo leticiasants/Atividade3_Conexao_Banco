@@ -5,7 +5,7 @@ class View():
         return self.menu()
     
     def menu(self):
-        print('MENU')
+        print('\n --- MENU ---')
         print('1 - Criar pedido')
         print('2 - Consultar um pedido')
         print('3 - Ranking dos funcionários')
@@ -52,18 +52,20 @@ class View():
         
         return orderid
     
-    def relatorioConsultaPedido(self, order):
+    def relatorioConsultaPedido(self, order, orderDetails, employee):
         if (order is not None):
             print(f'Id do pedido: {order.orderid}')
             print(f'Id do cliente: {order.customerid}')
-            print(f'Id do funcionário: {order.employeeid}')
+            print(f'Nome do funcionário: {employee.firstname} {employee.lastname}')
             print(f'Data do pedido: {order.orderdate}')
             print(f'Data necessária: {order.requireddate}')
             print(f'Data de envio: {order.shippeddate}')
-            print(f'Produto: {order.productid}')
-            print(f'Quantidade: {order.quantity}')
-            print(f'Preço unitário: {order.unitprice}')
-            print(f'Preço total: {order.unitprice*order.quantity}')
+            for det in orderDetails:
+                print(f'Produto: {det.productid}')
+                print(f'Quantidade: {det.quantity}')
+                if det.unitprice is not None:
+                    print(f'Preço unitário: {det.unitprice}')
+                    print(f'Preço total: {det.unitprice*det.quantity}')
         
         else:
             print("O pedido não existe")
@@ -86,9 +88,10 @@ class View():
     def relatorioRankingFuncionarios(self, listEmployees):
         if (listEmployees is not None):
             for employeer in listEmployees:
-                print(f'Nome do funcionário: {employeer.lastname} {employeer.firstname}')
+                print('\n ---- ')
+                print(f'Nome do funcionário: {employeer.firstname} {employeer.lastname}')
                 print(f'Total de pedidos: {employeer.orders}')
-                print(f'Soma dos valores vendidos: {employeer.value}')
+                print(f'Soma dos valores vendidos: {employeer.total_value}')
             
         else:
             print("O pedido não existe")
