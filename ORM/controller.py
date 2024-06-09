@@ -56,7 +56,7 @@ class Controller:
         datas = self.view.rankearFuncionarios()
         dataIni = datas[0]
         dataFin = datas[1]
-        ranking = RankingFuncionarioDao.obter(self, dataIni, dataFin)
+        ranking = self.rankingFuncionarioDao.obter( dataIni, dataFin)
         
         self.view.relatorioRankingFuncionarios(ranking)
     
