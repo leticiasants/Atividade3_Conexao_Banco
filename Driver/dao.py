@@ -79,10 +79,13 @@ class FuncionarioDao:
     def __init__(self):
         self.auxiliar = Auxiliar()
 
-    def obter(self, primeiro_nome=None, ultimo_nome=None):
+    def obter(self, id=None, primeiro_nome=None, ultimo_nome=None):
         sql = 'select * from northwind.employees'
         parametros = None
-        if primeiro_nome is not None and ultimo_nome is not None:
+        if id is not None:
+            sql+='where employeeid = %s'
+            parametros=(id,)
+        elif primeiro_nome is not None and ultimo_nome is not None:
             sql += ' where firstname=%s and lastname=%s'
             parametros = (primeiro_nome,ultimo_nome)
         res = self.auxiliar.executar_query(sql, parametros)
