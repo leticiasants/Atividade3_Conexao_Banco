@@ -55,8 +55,11 @@ class Controller:
         pedidoCons = self.view.consultarPedido()
         
         pedido = OrderDao.obter(self, pedidoCons)
-        detalhes = OrderDetail.obter(self, pedidoCons)
+        detalhes = OrderDetailsDao.obter(self, pedidoCons)
         
+        for det in detalhes:
+            detalhesPedido = vars(det)
+        print(detalhesPedido)
         self.view.relatorioConsultaPedido(pedido, detalhes)
     
     def rankingFunc(self):

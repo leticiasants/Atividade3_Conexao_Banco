@@ -60,10 +60,11 @@ class View():
             print(f'Data do pedido: {order.orderdate}')
             print(f'Data necessária: {order.requireddate}')
             print(f'Data de envio: {order.shippeddate}')
-            print(f'Produto: {orderDetails.productid}')
-            print(f'Quantidade: {orderDetails.quantity}')
-            print(f'Preço unitário: {orderDetails.unitprice}')
-            print(f'Preço total: {orderDetails.unitprice*orderDetails.quantity}')
+            for det in orderDetails:
+                print(f'Produto: {det.productid}')
+                print(f'Quantidade: {det.quantity}')
+                print(f'Preço unitário: {det.unitprice}')
+                print(f'Preço total: {det.unitprice*det.quantity}')
         
         else:
             print("O pedido não existe")

@@ -1,5 +1,5 @@
 # coding: utf-8
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, Numeric, SmallInteger, String, Text
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, Numeric, SmallInteger, String, Text, text
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -115,6 +115,8 @@ class Order(Base):
     shippostalcode = Column(String(9))
     shipcountry = Column(String(15))
     shipperid = Column(Integer)
+    qtdprodutos = Column(Integer, server_default=text("0"))
+    maisdesconto = Column(Integer, server_default=text("0"))
 
 
 
