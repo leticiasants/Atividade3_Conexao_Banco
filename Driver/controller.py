@@ -54,8 +54,10 @@ class Controller:
     def consultarPedido(self):
         pedidoCons = self.view.consultarPedido()
         
-        relatorio = OrderDao.obter(pedidoCons)
-        self.view.relatorioConsultaPedido(relatorio)
+        pedido = OrderDao.obter(self, pedidoCons)
+        detalhes = OrderDetail.obter(self, pedidoCons)
+        
+        self.view.relatorioConsultaPedido(pedido, detalhes)
     
     def rankingFunc(self):
         renkingFunc = self.view.rankearFuncionarios()
