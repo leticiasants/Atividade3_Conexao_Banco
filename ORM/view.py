@@ -54,6 +54,7 @@ class View():
     
     def relatorioConsultaPedido(self, order, orderDetails, employee):
         if (order is not None):
+            print('----')
             print(f'Id do pedido: {order.orderid}')
             print(f'Id do cliente: {order.customerid}')
             print(f'Nome do funcionário: {employee.firstname} {employee.lastname}')
