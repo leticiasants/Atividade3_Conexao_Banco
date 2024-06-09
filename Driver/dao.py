@@ -40,9 +40,9 @@ class OrderDao:
         self.auxiliar = Auxiliar()
 
     def inserir(self, pedido):
-        sql = "Insert into northwind.orders (orderid, customerid, employeeid, orderdate) values (%s,%s,%s,%s)"
+        sql = "Insert into northwind.orders (orderid, customerid, employeeid, orderdate, requireddate, shippeddate) values (%s,%s,%s,%s)"
         parametros = (pedido.orderid, pedido.customerid,
-                      pedido.employeeid, pedido.orderdate)
+                      pedido.employeeid, pedido.orderdate, pedido.requireddate, pedido.shippeddate)
         self.auxiliar.executar_query(sql, parametros)
 
     def obter(self, id=None):
@@ -60,9 +60,9 @@ class OrderDetailsDao:
         self.auxiliar = Auxiliar()
 
     def inserir(self, detalhes_pedido):
-        sql = "Insert into northwind.order_details (orderid, productid, unitprice, quantity) values (%s,%s,%s,%s)"
+        sql = "Insert into northwind.order_details (orderid, productid, quantity) values (%s,%s,%s)"
         parametros = (detalhes_pedido.orderid, detalhes_pedido.productid,
-                      detalhes_pedido.unitprice, detalhes_pedido.quantity)
+                      detalhes_pedido.quantity)
         self.auxiliar.executar_query(sql, parametros)
 
     def obter(self, id=None):
