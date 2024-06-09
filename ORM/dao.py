@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from model import Order, OrderDetail, Employee, Customer
 
 # Configurar o motor SQLAlchemy
-DATABASE_URL = 'postgresql://postgres:root@localhost/northwind' # Trocar a senha e o usuario caso seja necessário
+DATABASE_URL = 'postgresql+psycopg2://postgres:Dg26725845@localhost/northwind' # Trocar a senha e o usuario caso seja necessário
 engine = create_engine(DATABASE_URL)
 Session = sessionmaker(bind=engine)
 
@@ -34,6 +34,7 @@ class OrderDao:
         try:
             self.auxiliar.session.add(pedido)
             self.auxiliar.session.commit()
+            return 1
         except Exception as e:
             print(f"Erro ao inserir pedido: {e}")
             self.auxiliar.session.rollback()
@@ -57,6 +58,7 @@ class OrderDetailsDao:
         try:
             self.auxiliar.session.add(detalhes_pedido)
             self.auxiliar.session.commit()
+            return 1
         except Exception as e:
             print(f"Erro ao inserir detalhes do pedido: {e}")
             self.auxiliar.session.rollback()
@@ -79,7 +81,7 @@ class FuncionarioDao:
     def obter(self, primeiro_nome=None, ultimo_nome=None):
         try:
             if primeiro_nome is not None and ultimo_nome is not None:
-                res = self.auxiliar.session.query(Employee).filter(Employee.firstname == primeiro_nome, Employee.lastname == ultimo_nome).all()
+                res = self.auxiliar.session.query(Employee).filter(Employee.firstname == primeiro_nome, Employee.lastname == ultimo_nome).first()
             else:
                 res = self.auxiliar.session.query(Employee).all()
             return res
