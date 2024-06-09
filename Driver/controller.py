@@ -1,12 +1,13 @@
 from view import View
-from dao import Auxiliar, OrderDao, OrderDetailsDao, FuncionarioDao, ClienteDao
 from model import Category, Customer, Employee, Product, Shipper, Supplier, Order, OrderDetail
+from dao import OrderDao, OrderDetailsDao, FuncionarioDao, ClienteDao
 
 class Controller:
     def __init__(self):
         self.view = View()
-        self.auxiliar = Auxiliar()
-        self.order = Order()
+        self.orderDao=OrderDao()
+        self.orderDetailsDao=OrderDetailsDao()
+        self.funcionarioDao=FuncionarioDao()
 
     def main(self):
         opcao = self.view.main()
@@ -22,40 +23,26 @@ class Controller:
             opcao = self.view.main()
             
     def criarPedido(self):
-        pedido = self.view.criarPedido()
+        pedido_atributos = self.view.criarPedido()
         
-        employeeFirstName = pedido[2]
-        employeeLastName = pedido[3]
+        employeeFirstName = pedido_atributos[2]
+        employeeLastName = pedido_atributos[3]
+        try:        
+            employee = self.funcionarioDao.obter(employeeFirstName, employeeLastName)
+            pedido=Order(orderid=pedido_atributos[0], customerid=pedido_atributos[1], orderdate=pedido_atributos[4],requireddate=pedido_atributos[4],shippeddate=pedido_atributos[5],employeeid=employee.employeeid)
+            self.orderDao.inserir(pedido)
+            for prod in pedido_atributos[7]:
+                self.orderDetailsDao.inserir(OrderDetail(orderid=pedido_atributos[0],productid=prod[0],quantity=prod[1]))
         
-        employee = FuncionarioDao.obter(self, employeeFirstName, employeeLastName)
-        
-        employee_id = employee.employeeid
-    
-        pedido.pop(2)
-        pedido.pop(2)
-        pedido.insert(2, employee_id)        
-            
-        responsePedido = OrderDao.inserir(pedido)
-        
-        if responsePedido != None:
-            response = 1
-            while response != None:
-                for prodQuant in pedido[7]:
-                    detalhes_pedido = []
-                    detalhes_pedido.append(pedido[0])
-                    
-                    for prod in prodQuant:
-                        detalhes_pedido.append(prod)
-                    
-                response = OrderDetailsDao.inserir(detalhes_pedido)
-        
-        self.view.responseCriarPedido(response)
-    
+            self.view.responseCriarPedido(1)
+        except Exception as e:
+            self.view.responseCriarPedido(None)
+
     def consultarPedido(self):
         pedidoCons = self.view.consultarPedido()
         
-        pedido = OrderDao.obter(self, pedidoCons)
-        detalhes = OrderDetailsDao.obter(self, pedidoCons)
+        pedido = self.orderDao.obter(pedidoCons)
+        detalhes = self.orderDetailsDao.obter(pedidoCons)
         
         for det in detalhes:
             detalhesPedido = vars(det)
