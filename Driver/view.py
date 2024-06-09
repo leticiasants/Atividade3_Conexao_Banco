@@ -52,11 +52,12 @@ class View():
         
         return orderid
     
-    def relatorioConsultaPedido(self, order, orderDetails):
+    def relatorioConsultaPedido(self, order, orderDetails, employee):
         if (order is not None):
+            print('----')
             print(f'Id do pedido: {order.orderid}')
             print(f'Id do cliente: {order.customerid}')
-            print(f'Id do funcionário: {order.employeeid}')
+            print(f'Nome do funcionário: {employee.firstname} {employee.lastname}')
             print(f'Data do pedido: {order.orderdate}')
             print(f'Data necessária: {order.requireddate}')
             print(f'Data de envio: {order.shippeddate}')

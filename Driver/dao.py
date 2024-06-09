@@ -1,6 +1,6 @@
 import psycopg
 from psycopg.errors import OperationalError, DatabaseError
-from model import Order, OrderDetail, Employee, Customer, EmployeeRanking
+from model import Order, OrderDetail, Employee, Customer, EmployeeRanking, Product
 
 #Classe com métodos genéricos para execução de queries e processamento dos resultados
 class Auxiliar:
@@ -69,12 +69,26 @@ class OrderDetailsDao:
         sql = 'select * from northwind.order_details'
         parametros = None
         if id is not None:
-            sql += ' where orderid=%s'
+            sql += ' where orderid = %s'
             parametros = (id,)
         res = self.auxiliar.executar_query(sql, parametros)
         return self.auxiliar.processar(res, OrderDetail)
-
-
+    
+class ProductsDao:
+    def __init__(self) -> None:
+        self.auxiliar = Auxiliar()
+        
+    def obterUnitPrice(self, id=None):
+        sql = 'SELECT unitprice FROM northwind.products'
+        parametros = []
+        if id is not None:
+            sql += ' WHERE productid = %s'
+            parametros = [id]
+        res = self.auxiliar.executar_query(sql, parametros)
+        res = self.auxiliar.processar(res, Product)
+        
+        return res.unitprice
+     
 class FuncionarioDao:
     def __init__(self):
         self.auxiliar = Auxiliar()
@@ -83,7 +97,7 @@ class FuncionarioDao:
         sql = 'select * from northwind.employees'
         parametros = None
         if id is not None:
-            sql+='where employeeid = %s'
+            sql+=' where employeeid = %s'
             parametros=(id,)
         elif primeiro_nome is not None and ultimo_nome is not None:
             sql += ' where firstname=%s and lastname=%s'

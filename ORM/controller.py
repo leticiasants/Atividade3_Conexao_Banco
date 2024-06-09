@@ -44,10 +44,13 @@ class Controller:
         pedidoCons = self.view.consultarPedido()
         pedido = self.orderDao.obter(pedidoCons)
         detalhes = self.orderDetailsDao.obter(pedidoCons)
-        vendedor = self.funcionarioDao.obterFuncionarioPorId(pedido.employeeid)
-        self.view.relatorioConsultaPedido(pedido, detalhes, vendedor)
+        vendedor = self.funcionarioDao.obter(pedido.employeeid)
 
+        for det in detalhes:
+            if det.unitprice is None:
+                det.unitprice = self.productsDao.obterUnitPrice(det.productid)
         
+        self.view.relatorioConsultaPedido(pedido, detalhes, vendedor)      
     
     def rankingFunc(self):
         datas = self.view.rankearFuncionarios()
