@@ -160,3 +160,13 @@ class OrderDetail(Base):
     order1 = relationship('Order', primaryjoin='OrderDetail.orderid == Order.orderid')
     product = relationship('Product', primaryjoin='OrderDetail.productid == Product.productid')
     product1 = relationship('Product', primaryjoin='OrderDetail.productid == Product.productid')
+    
+class EmployeeRanking:
+    def __init__(self, firstname, lastname, orders, total_value):
+        self.firstname = firstname
+        self.lastname = lastname
+        self.orders = orders
+        self.total_value = total_value
+
+    def __repr__(self):
+        return f"EmployeeRanking(firstname={self.firstname}, lastname={self.lastname}, orders={self.orders}, total_value={self.total_value})"

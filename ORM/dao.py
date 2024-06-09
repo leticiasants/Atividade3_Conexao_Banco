@@ -1,6 +1,6 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
-from model import Order, OrderDetail, Employee, Customer
+from model import Order, OrderDetail, Employee, Customer, Product
 
 # Configurar o motor SQLAlchemy
 DATABASE_URL = 'postgresql+psycopg2://postgres:Dg26725845@localhost/northwind' # Trocar a senha e o usuario caso seja necessário
@@ -42,7 +42,7 @@ class OrderDao:
     def obter(self, id=None):
         try:
             if id is not None:
-                res = self.auxiliar.session.query(Order).filter(Order.orderid == id).all()
+                res = self.auxiliar.session.query(Order).filter(Order.orderid == id).first()
             else:
                 res = self.auxiliar.session.query(Order).all()
             return res
@@ -87,6 +87,40 @@ class FuncionarioDao:
             return res
         except Exception as e:
             print(f"Erro ao obter funcionário: {e}")
+            return None
+    def obterFuncionarioPorId(self, id=None):
+        try:
+            if id is not None:
+                res = self.auxiliar.session.query(Employee).filter(Employee.employeeid == id).first()
+                return res if res else None
+            else:
+                return None
+        except Exception as e:
+            print(f"Erro ao obter funcionário por ID: {e}")
+            return None
+        
+class RankingFuncionarioDao:
+    def __init__(self):
+        self.auxiliar = Auxiliar()
+
+    def obter(self, dataIni=None, dataFin=None):
+        try:
+            query = self.auxiliar.session.query(
+                Employee.firstname,
+                Employee.lastname,
+                func.count(Order.orderid).label('orders'),
+                func.sum(OrderDetail.unitprice * OrderDetail.quantity).label('total_value')
+            ).outerjoin(Order, Employee.employeeid == Order.employeeid
+            ).outerjoin(OrderDetail, Order.orderid == OrderDetail.orderid
+            ).group_by(Employee.employeeid, Employee.firstname, Employee.lastname)
+
+            if dataIni and dataFin:
+                query = query.filter(Employee.hiredate.between(dataIni, dataFin))
+
+            res = query.all()
+            return res
+        except Exception as e:
+            print(f"Erro ao obter ranking de funcionários: {e}")
             return None
 
 class ClienteDao:
