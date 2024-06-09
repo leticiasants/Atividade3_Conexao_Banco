@@ -52,7 +52,7 @@ class View():
         
         return orderid
     
-    def relatorioConsultaPedido(self, order):
+    def relatorioConsultaPedido(self, order, orderDetails):
         if (order is not None):
             print(f'Id do pedido: {order.orderid}')
             print(f'Id do cliente: {order.customerid}')
@@ -60,10 +60,10 @@ class View():
             print(f'Data do pedido: {order.orderdate}')
             print(f'Data necessária: {order.requireddate}')
             print(f'Data de envio: {order.shippeddate}')
-            print(f'Produto: {order.productid}')
-            print(f'Quantidade: {order.quantity}')
-            print(f'Preço unitário: {order.unitprice}')
-            print(f'Preço total: {order.unitprice*order.quantity}')
+            print(f'Produto: {orderDetails.productid}')
+            print(f'Quantidade: {orderDetails.quantity}')
+            print(f'Preço unitário: {orderDetails.unitprice}')
+            print(f'Preço total: {orderDetails.unitprice*orderDetails.quantity}')
         
         else:
             print("O pedido não existe")
