@@ -122,6 +122,25 @@ class RankingFuncionarioDao:
         except Exception as e:
             print(f"Erro ao obter ranking de funcionários: {e}")
             return None
+        
+class ProductsDao:
+    def __init__(self) -> None:
+        self.auxiliar = Auxiliar()
+
+    def obterUnitPrice(self, id=None):
+        try:
+            if id is not None:
+                product = self.auxiliar.session.query(Product).filter(Product.productid == id).one_or_none()
+                if product:
+                    return product.unitprice
+                else:
+                    return None
+            else:
+                products = self.auxiliar.session.query(Product.unitprice).all()
+                return [product.unitprice for product in products]
+        except Exception as e:
+            print(f"Erro ao obter preço unitário: {e}")
+            return None
 
 class ClienteDao:
     def __init__(self) -> None:

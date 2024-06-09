@@ -1,5 +1,5 @@
 from view import View
-from dao import OrderDao, OrderDetailsDao, FuncionarioDao, ClienteDao, RankingFuncionarioDao
+from dao import OrderDao, OrderDetailsDao, FuncionarioDao, ProductsDao, RankingFuncionarioDao
 from model import Category, Customer, Employee, Product, Shipper, Supplier, Order, OrderDetail
 
 class Controller:
@@ -9,6 +9,7 @@ class Controller:
         self.orderDetailsDao = OrderDetailsDao()
         self.funcionarioDao = FuncionarioDao()
         self.rankingFuncionarioDao = RankingFuncionarioDao()
+        self.productsDao = ProductsDao()
 
     def main(self):
         opcao = self.view.main()
@@ -44,12 +45,11 @@ class Controller:
         pedidoCons = self.view.consultarPedido()
         pedido = self.orderDao.obter(pedidoCons)
         detalhes = self.orderDetailsDao.obter(pedidoCons)
-        vendedor = self.funcionarioDao.obter(pedido.employeeid)
+        vendedor = self.funcionarioDao.obterFuncionarioPorId(pedido.employeeid)
 
         for det in detalhes:
             if det.unitprice is None:
                 det.unitprice = self.productsDao.obterUnitPrice(det.productid)
-        
         self.view.relatorioConsultaPedido(pedido, detalhes, vendedor)      
     
     def rankingFunc(self):
