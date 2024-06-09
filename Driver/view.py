@@ -11,14 +11,14 @@ class View():
         print('3 - Ranking dos funcionários')
         print('4 - Encerrar')
         
-        opcao = int(input('O que deseja?'))
+        opcao = int(input('O que deseja? '))
         return opcao
     
     def criarPedido(self):
         orderid = int(input('Id do pedido: '))
         customerid = input('Id do cliente: ')
-        employeeLastName = input('Primeiro nome do fúncionário: ')
-        employeeFirstName = input('Sobrenome do fúncionário: ')
+        employeeFirstName = input('Primeiro nome do fúncionário: ')
+        employeeLastName = input('Sobrenome do fúncionário: ')
         orderdate = input('Data do pedido (YYYY-MM-DD): ')
         year, month, day = map(int, orderdate.split('-'))
         orderdate = datetime(year, month, day)
@@ -41,10 +41,9 @@ class View():
             
             addProduto = int(input('Deseja inserir mais produtos? \nDigite 1 caso afirmativo e 0 para negativo\n'))
         
-        pedidoAtributos = [orderid, customerid, 
-                  employeeLastName, employeeFirstName,
-                  orderdate, requireddate, shippeddate,
-                  products]
+        pedidoAtributos = [orderid, customerid, employeeFirstName, 
+                        employeeLastName, orderdate, requireddate, 
+                        shippeddate, products]
         
         return pedidoAtributos
         
@@ -93,3 +92,10 @@ class View():
             
         else:
             print("O pedido não existe")
+            
+    def responseCriarPedido(self, response):
+        if(response != None):
+            print(response)
+        else:
+            print("Algo deu errado!")
+            

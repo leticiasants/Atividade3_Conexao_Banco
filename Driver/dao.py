@@ -8,7 +8,7 @@ class Auxiliar:
     #método que recebe a query a ser executada e seus parâmetros.  Cria a conexão com o banco
     def executar_query(self, sql, parametros):
         try:
-            with psycopg.connect(host='localhost', dbname='northwind', user='postgres', password='root') as northwind:
+            with psycopg.connect(host='localhost', dbname='northwind', user='postgres', password='03122018') as northwind:
                 with northwind.cursor() as sessao:
                     sessao.execute(sql, parametros)
                     #checa se o comando executado retornou resultados
@@ -43,7 +43,7 @@ class OrderDao:
         sql = "Insert into northwind.orders (orderid, customerid, employeeid, orderdate, requireddate, shippeddate) values (%s,%s,%s,%s)"
         parametros = (pedido.orderid, pedido.customerid,
                       pedido.employeeid, pedido.orderdate, pedido.requireddate, pedido.shippeddate)
-        self.auxiliar.executar_query(sql, parametros)
+        return self.auxiliar.executar_query(sql, parametros)
 
     def obter(self, id=None):
         sql = 'select * from northwind.orders'
