@@ -1,13 +1,14 @@
 from view import View
 from model import Category, Customer, Employee, Product, Shipper, Supplier, Order, OrderDetail
-from dao import OrderDao, OrderDetailsDao, FuncionarioDao, ClienteDao
+from dao import OrderDao, OrderDetailsDao, FuncionarioDao, RankingFuncionarioDao, ClienteDao
 
 class Controller:
     def __init__(self):
         self.view = View()
-        self.orderDao=OrderDao()
-        self.orderDetailsDao=OrderDetailsDao()
-        self.funcionarioDao=FuncionarioDao()
+        self.orderDao = OrderDao()
+        self.orderDetailsDao = OrderDetailsDao()
+        self.funcionarioDao = FuncionarioDao()
+        self.rankingFuncionarioDao = RankingFuncionarioDao()
 
     def main(self):
         opcao = self.view.main()
@@ -27,9 +28,10 @@ class Controller:
         
         employeeFirstName = pedido_atributos[2]
         employeeLastName = pedido_atributos[3]
+        
         try:        
             employee = self.funcionarioDao.obter(employeeFirstName, employeeLastName)
-            pedido=Order(orderid=pedido_atributos[0], customerid=pedido_atributos[1], orderdate=pedido_atributos[4],requireddate=pedido_atributos[4],shippeddate=pedido_atributos[5],employeeid=employee.employeeid)
+            pedido = Order(orderid=pedido_atributos[0], customerid=pedido_atributos[1], orderdate=pedido_atributos[4],requireddate=pedido_atributos[4],shippeddate=pedido_atributos[5],employeeid=employee.employeeid)
             self.orderDao.inserir(pedido)
             for prod in pedido_atributos[7]:
                 self.orderDetailsDao.inserir(OrderDetail(orderid=pedido_atributos[0],productid=prod[0],quantity=prod[1]))
@@ -44,15 +46,15 @@ class Controller:
         pedido = self.orderDao.obter(pedidoCons)
         detalhes = self.orderDetailsDao.obter(pedidoCons)
         
-        for det in detalhes:
-            detalhesPedido = vars(det)
-        print(detalhesPedido)
         self.view.relatorioConsultaPedido(pedido, detalhes)
     
     def rankingFunc(self):
-        renkingFunc = self.view.rankearFuncionarios()
+        datas = self.view.rankearFuncionarios()
+        dataIni = datas[0]
+        dataFin = datas[1]
+        ranking =  self.rankingFuncionarioDao.obter(dataIni, dataFin)
         
-        self.view.relatorioRankingFuncionarios()
+        self.view.relatorioRankingFuncionarios(ranking)
     
 if __name__ == "__main__":
     controller = Controller()

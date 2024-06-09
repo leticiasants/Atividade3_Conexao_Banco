@@ -5,7 +5,7 @@ class View():
         return self.menu()
     
     def menu(self):
-        print('MENU')
+        print('\n --- MENU ---')
         print('1 - Criar pedido')
         print('2 - Consultar um pedido')
         print('3 - Ranking dos funcionários')
@@ -63,8 +63,9 @@ class View():
             for det in orderDetails:
                 print(f'Produto: {det.productid}')
                 print(f'Quantidade: {det.quantity}')
-                print(f'Preço unitário: {det.unitprice}')
-                print(f'Preço total: {det.unitprice*det.quantity}')
+                if det.unitprice is not None:
+                    print(f'Preço unitário: {det.unitprice}')
+                    print(f'Preço total: {det.unitprice*det.quantity}')
         
         else:
             print("O pedido não existe")
@@ -87,9 +88,10 @@ class View():
     def relatorioRankingFuncionarios(self, listEmployees):
         if (listEmployees is not None):
             for employeer in listEmployees:
-                print(f'Nome do funcionário: {employeer.lastname} {employeer.firstname}')
+                print('\n ---- ')
+                print(f'Nome do funcionário: {employeer.firstname} {employeer.lastname}')
                 print(f'Total de pedidos: {employeer.orders}')
-                print(f'Soma dos valores vendidos: {employeer.value}')
+                print(f'Soma dos valores vendidos: {employeer.total_value}')
             
         else:
             print("O pedido não existe")

@@ -129,4 +129,15 @@ class OrderDetail(Base):
     unitprice = Column(Numeric(13, 4))
     quantity = Column(SmallInteger)
     discount = Column(Numeric(10, 4))
+    
+class EmployeeRanking:
+    def __init__(self, firstname, lastname, orders, total_value):
+        self.firstname = firstname
+        self.lastname = lastname
+        self.orders = orders
+        self.total_value = total_value
+
+    def __repr__(self):
+        return f"EmployeeRanking(firstname={self.firstname}, lastname={self.lastname}, orders={self.orders}, total_value={self.total_value})"
+
 

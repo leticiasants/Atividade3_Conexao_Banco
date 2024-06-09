@@ -1,6 +1,6 @@
 import psycopg
 from psycopg.errors import OperationalError, DatabaseError
-from model import Order, OrderDetail, Employee, Customer
+from model import Order, OrderDetail, Employee, Customer, EmployeeRanking
 
 #Classe com métodos genéricos para execução de queries e processamento dos resultados
 class Auxiliar:
@@ -8,7 +8,7 @@ class Auxiliar:
     #método que recebe a query a ser executada e seus parâmetros.  Cria a conexão com o banco
     def executar_query(self, sql, parametros):
         try:
-            with psycopg.connect(host='localhost', dbname='northwind', user='postgres', password='root') as northwind:
+            with psycopg.connect(host='localhost', dbname='northwind', user='postgres', password='03122018') as northwind:
                 with northwind.cursor() as sessao:
                     sessao.execute(sql, parametros)
                     #checa se o comando executado retornou resultados
@@ -80,16 +80,37 @@ class FuncionarioDao:
         self.auxiliar = Auxiliar()
 
     def obter(self, primeiro_nome=None, ultimo_nome=None):
-        primeiro_nome = 'Nancy'
-        ultimo_nome = 'Davolio'
         sql = 'select * from northwind.employees'
         parametros = None
         if primeiro_nome is not None and ultimo_nome is not None:
             sql += ' where firstname=%s and lastname=%s'
             parametros = (primeiro_nome,ultimo_nome)
-        print(parametros)
         res = self.auxiliar.executar_query(sql, parametros)
         return self.auxiliar.processar(res, Employee)
+
+class RankingFuncionarioDao:
+    def __init__(self):
+        self.auxiliar = Auxiliar()
+
+    def obter(self, dataIni=None, dataFin=None):
+        sql = '''
+            SELECT 
+                employees.firstname, 
+                employees.lastname, 
+                COUNT(orders.orderid) AS orders, 
+                SUM(order_details.unitprice * order_details.quantity) AS total_value 
+            FROM northwind.employees 
+            LEFT JOIN northwind.orders ON employees.employeeid = orders.employeeid 
+            LEFT JOIN northwind.order_details ON orders.orderid = order_details.orderid
+        '''
+        parametros = None
+        if dataIni is not None and dataFin is not None:
+            sql += ' WHERE employees.hiredate BETWEEN %s AND %s'
+            parametros = (dataIni, dataFin)
+        sql += ' GROUP BY employees.employeeid, employees.firstname, employees.lastname'
+        
+        res = self.auxiliar.executar_query(sql, parametros)
+        return self.auxiliar.processar(res, EmployeeRanking) 
 
 
 class ClienteDao:
