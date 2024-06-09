@@ -1,7 +1,7 @@
 from datetime import datetime
 
 class View():
-    def __init__(self):
+    def main(self):
         return self.menu()
     
     def menu(self):
