@@ -73,7 +73,7 @@ class View():
             
             
     def rankearFuncionarios(self):
-        print('Diga o intervalo de tempo de xx dos funcionários')
+        print('Diga o intervalo de tempo de contratação dos funcionários')
         dataini = input('Data inicial (YYYY-MM-DD): ')
         year, month, day = map(int, dataini.split('-'))
         dataini = datetime(year, month, day)
