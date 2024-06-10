@@ -95,7 +95,7 @@ class View():
                 print(f'Soma dos valores vendidos: {employeer.total_value}')
             
         else:
-            print("O pedido não existe")
+            print("Não existe funcionário contratado nesse periodo de tempo")
             
     def responseCriarPedido(self, response):
         if(response != None):
